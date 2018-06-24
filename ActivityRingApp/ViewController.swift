@@ -35,9 +35,8 @@ class ViewController: UIViewController {
         }
     }
     
-    func show(activitySummaries: HKActivitySummary) {
+    func show(activitySummaries: [HKActivitySummary]) {
         
-        let ringView = HKActivityRingView(frame: CGRect(x: 0, y: 0, width: 120, height: 120))
 //        let summary = HKActivitySummary()
         
         // ムーヴ 
@@ -52,12 +51,15 @@ class ViewController: UIViewController {
 //        summary.appleStandHours = HKQuantity(unit: HKUnit.count(), doubleValue: 2)
 //        summary.appleStandHoursGoal = HKQuantity(unit: HKUnit.count(), doubleValue: 8)
         
-        ringView.setActivitySummary(activitySummaries, animated: true)
-        print("move: \(activitySummaries.activeEnergyBurned) / \(activitySummaries.activeEnergyBurnedGoal)")
-        print("exercise: \(activitySummaries.appleExerciseTime) / \(activitySummaries.appleExerciseTimeGoal)")
-        print("stand: \(activitySummaries.appleStandHours) / \(activitySummaries.appleStandHoursGoal)")
-        
-        self.view.addSubview(ringView)
+        for index in 0..<activitySummaries.count {
+            let ringView = HKActivityRingView(frame: CGRect(x: 120*(index % 3), y: Int(120*floor(Double(index/3))), width: 120, height: 120))
+            let activitySummary = activitySummaries[index]
+            ringView.setActivitySummary(activitySummary, animated: true)
+            print("move: \(activitySummary.activeEnergyBurned) / \(activitySummary.activeEnergyBurnedGoal)")
+            print("exercise: \(activitySummary.appleExerciseTime) / \(activitySummary.appleExerciseTimeGoal)")
+            print("stand: \(activitySummary.appleStandHours) / \(activitySummary.appleStandHoursGoal)")
+            self.view.addSubview(ringView)
+        }
     }
     
     func getSummary() {
@@ -96,7 +98,7 @@ class ViewController: UIViewController {
             }
             
             // Do something with the summaries here...
-            self.show(activitySummaries: activitySummaries.first!)
+            self.show(activitySummaries: activitySummaries)
         }
         
         // Run the query
